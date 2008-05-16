@@ -1,0 +1,8 @@
+## Interface: 20400
+## Title: TrinketMenu_ButtonFacade
+## Notes: ButtonFacade support for TrinketMenu
+## Author: jazzyfox
+## Dependencies: ButtonFacade, TrinketMenu
+## X-Category: Action Bars
+## X-Embeds: Ace3
+TrinketMenu_ButtonFacade.lua
