@@ -50,6 +50,7 @@ function f:ADDON_LOADED(event, addon)
 	db = TrinketMenu_ButtonFacadeDB
 		
 	self:SetupGroup("ActionBar", "TrinketMenu_Trinket", 2)
+	self:SetupGroup("ActionBar", "TrinketMenu_Menu", 31)
 	lbf:RegisterSkinCallback("TrinketMenu", self.SkinCallback, self)
 	
 	self:UnregisterEvent("ADDON_LOADED")
