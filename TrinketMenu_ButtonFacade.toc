@@ -4,5 +4,8 @@
 ## Author: jazzyfox
 ## Dependencies: ButtonFacade, TrinketMenu
 ## X-Category: Action Bars
-## X-Embeds: Ace3
+
+## SavedVariables: TrinketMenu_ButtonFacadeDB
+
+LibStub.lua
 TrinketMenu_ButtonFacade.lua

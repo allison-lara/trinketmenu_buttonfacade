@@ -1,32 +1,29 @@
--- TrinketMenu
-local bf = LibStub("AceAddon-3.0"):GetAddon("ButtonFacade")
+-- ButtonFacade support for TrinketMenu 
+-- Cribbed mostly from PT3Bar_ButtonFacade
+
 local lbf = LibStub("LibButtonFacade",true)
-local tmenubf = bf:NewModule("TrinketMenu")
 
-local defaults = {
-	profile = {
-		["*"] = {
-			Skin = "Blizzard",
-			Gloss = 0,
-			Backdrop = false,
-		},
-	},
-}
+local defaults, db = {
+	Skin = "Blizzard",
+	Gloss = 0,
+	Backdrop = true,
+	Colors = {},
+}, {}
 
-function tmenubf:OnInitialize()
-	self.db = self:RegisterNamespace("TrinketMenu", defaults)
-	self:Load()
-end
+local f = CreateFrame("frame")
+f:SetScript("OnEvent", function(self, event, ...) if self[event] then return self[event](self, event, ...) end end)
+f:RegisterEvent("ADDON_LOADED")
 
-function tmenubf:SkinCallback(skin, gloss, backdrop, group)
+function f:SkinCallback(skin, gloss, backdrop, group, button, colors)
 	if not group then return end
-	self.db.profile[group].Skin = skin
-	self.db.profile[group].Gloss = gloss
-	self.db.profile[group].Backdrop = backdrop
+	db.Skin = skin
+	db.Gloss = gloss
+	db.Backdrop = backdrop
+	db.Colors = colors
 end
 
 local btnAdded = {}
-function tmenubf:SetupGroup(group, frameprefix, count)
+function f:SetupGroup(group, frameprefix, count)
 	local bargroup = lbf:Group("TrinketMenu", group)
 	local doskin
 	for i=0, count-1, 1 do
@@ -40,12 +37,20 @@ function tmenubf:SetupGroup(group, frameprefix, count)
 		end
 	end
 	if doskin then
-		bargroup:Skin(self.db.profile[group].Skin, self.db.profile[group].Gloss,
-		              self.db.profile[group].Backdrop)
+	    bargroup.Colors = db.Colors
+		bargroup:Skin(db.Skin, dbGloss, db.Backdrop)
 	end
 end
 
-function tmenubf:Load()
+function f:ADDON_LOADED(event, addon)
+	if addon ~= "TrinketMenu_ButtonFacade" then return end
+
+	TrinketMenu_ButtonFacadeDB = 
+		setmetatable(TrinketMenu_ButtonFacadeDB or {}, {__index = defaults})
+	db = TrinketMenu_ButtonFacadeDB
+		
 	self:SetupGroup("ActionBar", "TrinketMenu_Trinket", 2)
 	lbf:RegisterSkinCallback("TrinketMenu", self.SkinCallback, self)
+	
+	self:UnregisterEvent("ADDON_LOADED")
 end
